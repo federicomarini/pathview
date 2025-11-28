@@ -11,12 +11,14 @@ importClassesFrom(AnnotationDbi,AnnotationDb)
 importFrom(org.Hs.eg.db, org.Hs.eg.db)
 
 importFrom(png, readPNG)
-importFrom(utils, data, installed.packages, read.delim, globalVariables)
+importFrom(utils, data, installed.packages, read.delim, globalVariables,
+           download.file)
 importFrom(XML, xmlAttrs, xmlChildren, xmlName, xmlRoot, xmlTreeParse)
 importFrom(grDevices, col2rgb, dev.off, pdf, png, rgb)
 importFrom(graphics, image, layout, par, polygon,
            rasterImage, rect, segments, text)
 importFrom(stats, IQR, rnorm)
+importFrom(BiocManager, install)
 
 export(
        download.kegg,
@@ -31,7 +33,7 @@ export(
        sim.mol.data,
 
        node.color, col.key,
-       
+
        wordwrap, strfit,
 
        pathview,
