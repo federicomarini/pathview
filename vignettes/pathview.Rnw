@@ -103,22 +103,24 @@ End R: type in \R{q()} when you are finished with the analysis using R, but not 
 
 Two options:
 
-Simple way: install with Bioconductor installation script \R{biocLite} directly (this included all dependencies automatically too):
+Simple way: install with the Bioconductor installation package \R{BiocManager} directly:
 <<install, echo=TRUE, eval=FALSE>>=
-source("http://bioconductor.org/biocLite.R")
-biocLite("pathview")
-@ 
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
 
-Or a bit more complexer: install through R-forge or manually, but require dependence packages to be installed using Bioconductor first:
-<<<install, echo=TRUE, eval=FALSE>>=
-source("http://bioconductor.org/biocLite.R")
-biocLite(c("Rgraphviz", "png", "KEGGgraph", "org.Hs.eg.db"))
-@ 
+BiocManager::install("pathview")
+@
 
-Then install \Rpackage{pathview} through R-forge.
-<<install, echo=TRUE, eval=FALSE>>=
-install.packages("pathview",repos="http://R-Forge.R-project.org")
-@ 
+% Or a bit more complexer: install through R-forge or manually, but require dependence packages to be installed using Bioconductor first:
+% <<<install, echo=TRUE, eval=FALSE>>=
+% source("http://bioconductor.org/biocLite.R")
+% biocLite(c("Rgraphviz", "png", "KEGGgraph", "org.Hs.eg.db"))
+% @
+%
+% Then install \Rpackage{pathview} through R-forge.
+% <<install, echo=TRUE, eval=FALSE>>=
+% install.packages("pathview",repos="http://R-Forge.R-project.org")
+% @
 
 Or install manually: download \Rpackage{pathview} package (from R-forge or Bioconductor, make sure with proper version number and zip format) and save to \verb@/your/local/directory/@.
 <<install, echo=TRUE, eval=FALSE>>=
