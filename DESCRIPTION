@@ -5,22 +5,40 @@ Version: 1.47.1
 Date: 2025-03-28
 Author: Weijun Luo
 Maintainer: Weijun Luo <luo_weijun@yahoo.com>
-Description: Pathview is a tool set for pathway based data integration
-        and visualization. It maps and renders a wide variety of
-        biological data on relevant pathway graphs. All users need is
-        to supply their data and specify the target pathway. Pathview
-        automatically downloads the pathway graph data, parses the data
-        file, maps user data to the pathway, and render pathway graph
-        with the mapped data. In addition, Pathview also seamlessly
-        integrates with pathway and gene set (enrichment) analysis tools for
-        large-scale and fully automated analysis.
-biocViews: Pathways, GraphAndNetwork, Visualization,
-        GeneSetEnrichment, DifferentialExpression, GeneExpression,
-        Microarray, RNASeq, Genetics, Metabolomics, Proteomics,
-        SystemsBiology, Sequencing
-Depends: R (>= 2.10)
-Imports: KEGGgraph, XML, Rgraphviz, graph, png, AnnotationDbi, org.Hs.eg.db, KEGGREST, methods, utils
-Suggests: gage, org.Mm.eg.db, RUnit, BiocGenerics
+Description: 
+    Pathview is a tool set for pathway based data integration
+    and visualization. It maps and renders a wide variety of
+    biological data on relevant pathway graphs. All users need is
+    to supply their data and specify the target pathway. Pathview
+    automatically downloads the pathway graph data, parses the data
+    file, maps user data to the pathway, and render pathway graph
+    with the mapped data. In addition, Pathview also seamlessly
+    integrates with pathway and gene set (enrichment) analysis tools for
+    large-scale and fully automated analysis.
+biocViews: Pathways, GraphAndNetwork, Visualization, GeneSetEnrichment, 
+    DifferentialExpression, GeneExpression, Microarray, RNASeq, Genetics, 
+    Metabolomics, Proteomics, SystemsBiology, Sequencing
+Depends: 
+    R (>= 2.10)
+Imports: 
+    KEGGgraph, 
+    XML, 
+    Rgraphviz, 
+    graph, 
+    png, 
+    AnnotationDbi, 
+    org.Hs.eg.db, 
+    KEGGREST, 
+    methods, 
+    BiocManager,
+    utils
+Suggests: 
+    knitr,
+    BiocStyle,
+    gage, 
+    org.Mm.eg.db, 
+    RUnit, 
+    BiocGenerics
 License: GPL (>=3.0)
 URL:  https://github.com/datapplab/pathview, https://pathview.uncc.edu/
 LazyLoad: yes
