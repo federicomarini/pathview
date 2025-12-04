@@ -104,7 +104,7 @@ If you are interested in working with other major pathway databases, including R
 
 `r BiocStyle::Biocpkg("pathview")` generates both native KEGG view (like Figure \@ref(fig:fig1a) in PNG format) and Graphviz view (like Figure \ref(fig:fig2) in PDF format) for pathways (Section \@ref(sec:visualization)). 
 KEGG view keeps all the meta-data on pathways, spacial and temporal information, tissue/cell types, inputs, outputs and connections. This is important for human reading and interpretation of pathway biology. Graphviz view provides better control of node and edge attributes, better view of pathway topology, better understanding of the pathway analysis statistics. Currently only KEGG pathways are implemented. Hopefully, pathways from Reactome, NCI and other databases will be supported in the future. Notice that KEGG requires subscription for FTP access since May 2011. 
-However, `r BiocStyle::Biocpkg("pathview")` downloads individual pathway graphs and data files through API or HTTP access, which is freely available (for academic and non-commerical uses). `r BiocStyle::Biocpkg("pathview")` uses `r BiocStyle::Biocpkg("KEGGgraph")` [@zhang:etal:2009] when parsing KEGG xml data files.
+However, `r BiocStyle::Biocpkg("pathview")` downloads individual pathway graphs and data files through API or HTTP access, which is freely available (for academic and non-commercial uses). `r BiocStyle::Biocpkg("pathview")` uses `r BiocStyle::Biocpkg("KEGGgraph")` [@zhang:etal:2009] when parsing KEGG xml data files.
 
 `r BiocStyle::Biocpkg("pathview")` provides strong support for data integration (Section \@ref(sec:integration)). It works with: 1) essentially all types of biological data mappable to pathways, 2) over 10 types of gene or protein IDs, and 20 types of compound or metabolite IDs, 3) pathways for about 4800 species as well as KEGG orthology, 4) various data attributes and formats, i.e. continuous/discrete data, matrices/vectors, single/multiple samples etc.
 
@@ -118,7 +118,7 @@ This vignette is written by assuming the user has minimal R/Bioconductor knowled
 
 # Installation {#sec:installation}
 
-Assume R and Bioconductor have been correctly installed and accessible under current directory. Otherwise, please contact your system admin or follow the instructions on [R website](https://www.r-project.org/) and [Bioconductor website](https://www.bioconductor.org/install/). Here I would strongly recommend users to install or upgrade to the latest verison of R (3.0.2+)/Bioconductor (2.14+) for simpler installation and better use of `r BiocStyle::Biocpkg("pathview")`. You may need to update the `BiocManager` package too, if you upgrade R/Bioconductor under Windows.
+Assume R and Bioconductor have been correctly installed and accessible under current directory. Otherwise, please contact your system admin or follow the instructions on [R website](https://www.r-project.org/) and [Bioconductor website](https://www.bioconductor.org/install/). Here I would strongly recommend users to install or upgrade to the latest version of R (3.0.2+)/Bioconductor (2.14+) for simpler installation and better use of `r BiocStyle::Biocpkg("pathview")`. You may need to update the `BiocManager` package too, if you upgrade R/Bioconductor under Windows.
 
 Start R: from Linux/Unix command line, type `R` (Enter); for Mac or Windows GUI, double click the R application icon to enter R console.
 
@@ -152,7 +152,7 @@ install.packages("/your/local/directory/pathview_1.0.0.tar.gz",
     repos = NULL, type = "source")
 ```
 
-Note that there might be problems when installing `r BiocStyle::Biocpkg("Rgraphviz")` or `r BiocStyle::CRANpkg("XML")` (`r BiocStyle::Biocpkg("KEGGgraph")` dependency) package with outdated R/Bioconductor. `r BiocStyle::Biocpkg("Rgraphviz")` installation is a bit complicate with R 2.5 (Biocondutor 2.10) or earlier versions. Please check this  [Readme file](https://pathview.r-forge.r-project.org/Rgraphviz.README) on `r BiocStyle::Biocpkg("Rgraphviz")`. 
+Note that there might be problems when installing `r BiocStyle::Biocpkg("Rgraphviz")` or `r BiocStyle::CRANpkg("XML")` (`r BiocStyle::Biocpkg("KEGGgraph")` dependency) package with outdated R/Bioconductor. `r BiocStyle::Biocpkg("Rgraphviz")` installation is a bit complicate with R 2.5 (Bioconductor 2.10) or earlier versions. Please check this  [Readme file](https://pathview.r-forge.r-project.org/Rgraphviz.README) on `r BiocStyle::Biocpkg("Rgraphviz")`. 
 On Windows systems,`r BiocStyle::CRANpkg("XML")` frequently needs to be installed manually. Its windows binary can be downloaded from [CRAN](https://cran.r-project.org/web/packages/XML/index.html) and then:
 ```{r install3, echo=TRUE, eval=FALSE}
 install.packages("/your/local/directory/XML_3.95-0.2.zip", repos = NULL)
@@ -222,7 +222,7 @@ head(paths.hsa,3)
 ```
 
 First, we view the expression changes of a single sample (pair) on a typical signaling pathway, "Cell Cycle", by specifying the `gene.data` and `pathway.id` (Figure \@ref(fig:fig1a)). 
-The microarray was done on human tissue, hence `species = "hsa"`. Note that such native KEGG view was outupt as a raster image in a PNG file in your working directory.
+The microarray was done on human tissue, hence `species = "hsa"`. Note that such native KEGG view was output as a raster image in a PNG file in your working directory.
 
 ```{r kegg.native, echo=TRUE}
 i <- 1
@@ -339,7 +339,7 @@ knitr::include_graphics("hsa04110.gse16873.split.expanded.pdf")
 # Data integration {#sec:integration}
 
 `r BiocStyle::Biocpkg("pathview")` provides strong support for data integration. It can be used to integrate, analyze and visualize a wide variety of biological data (Section \@ref(subsec:compound)): gene expression, protein expression, genetic association, metabolite, genomic data, literature, and other data types mappable to pathways. Notably, it can be directly used for metagenomic, microbiome or unknown species data when the data are mapped to KEGG ortholog pathways (Section \@ref(subsec:species)). 
-The integrated Mapper module maps a variety of gene/protein IDs and compound/metabolite IDs to standard KEGG gene or compound IDs (Section \@ref(subsec:ids)). User data named with any of these different ID types get accurately mapped to target KEGG pathways. Currently, `r BiocStyle::Biocpkg("pathview")` covers KEGG pathways for about 4800 species (Section \@ref(subsec:species)), and species can be specified either as KEGG code, scientific name or comon name. 
+The integrated Mapper module maps a variety of gene/protein IDs and compound/metabolite IDs to standard KEGG gene or compound IDs (Section \@ref(subsec:ids)). User data named with any of these different ID types get accurately mapped to target KEGG pathways. Currently, `r BiocStyle::Biocpkg("pathview")` covers KEGG pathways for about 4800 species (Section \@ref(subsec:species)), and species can be specified either as KEGG code, scientific name or common name. 
 In addition, `r BiocStyle::Biocpkg("pathview")`  works with different data attributes and formats, both continuous and discrete data (Section \@ref(subsec:discrete)), either in matrix or vector format, with single or multiple samples/experiments etc. Particularly, `r BiocStyle::Biocpkg("pathview")` can now integrate and compare multiple samples or states into one graph (Section \@ref(subsec:multiple)).
 
 ## Compound and gene data {#subsec:compound}
@@ -474,7 +474,7 @@ pv.out <- pathview(gene.data = gse16873.d[, 1:3],
 ## Discrete data {#subsec:discrete}
 
 So far, we have been dealing with continuous data. But we often work with discrete data too. For instance, we select list of significant genes or compound based on some statistics (p-value, fold change etc). 
-The input data can be named vector of two levels, either 1 or 0 (significant or not), or it can be a shorter list of signficant gene/compound names. In the next two examples, we made both `gene.data` and `cpd.data` discrete, or `gene.data` only (Figure \@ref(fig:fig6)).
+The input data can be named vector of two levels, either 1 or 0 (significant or not), or it can be a shorter list of significant gene/compound names. In the next two examples, we made both `gene.data` and `cpd.data` discrete, or `gene.data` only (Figure \@ref(fig:fig6)).
 
 ```{r discrete.gene_cpd.data, echo=TRUE}
 library("org.Hs.eg.db")
@@ -623,7 +623,7 @@ pv.out <- pathview(gene.data = ko.data, pathway.id = "04112",
 
 # Integrated workflow with pathway analysis {#sec:workflow}
 
-Although built as a stand alone program, `r BiocStyle::Biocpkg("pathview")` may seamlessly integrate with pathway and functional analysis tools for large-scale and fully automated analysis pipeline. The next example shows how to connect common pathway analysis to results rendering with `r BiocStyle::Biocpkg("pathview")`. The pathway analysis was done using another Bioconductor package `r BiocStyle::Biocpkg("gage")` [@luo:etal:2009], and the selected signficant pathways plus the expression data were then piped to `r BiocStyle::Biocpkg("pathview")` for auomated results visualization (Figure not shown).  In `r BiocStyle::Biocpkg("gage")` package, vignette ["RNA-Seq Data Pathway and Gene-set Analysis Workflows"](https://bioconductor.org/packages/release/bioc/vignettes/gage/inst/doc/RNA-seqWorkflow.pdf) demonstrates GAGE/Pathview workflows on RNA-seq (and microarray) pathway analysis. Note [the Pathview Web server](https://pathview.uncc.edu/) provides a comprehensive workflow for both regular and integrated pathway analysis of multiple omics data [@luo:etal:2017], as shown in [Example 4 online](https://pathview.uncc.edu/example4).
+Although built as a stand alone program, `r BiocStyle::Biocpkg("pathview")` may seamlessly integrate with pathway and functional analysis tools for large-scale and fully automated analysis pipeline. The next example shows how to connect common pathway analysis to results rendering with `r BiocStyle::Biocpkg("pathview")`. The pathway analysis was done using another Bioconductor package `r BiocStyle::Biocpkg("gage")` [@luo:etal:2009], and the selected significant pathways plus the expression data were then piped to `r BiocStyle::Biocpkg("pathview")` for automated results visualization (Figure not shown).  In `r BiocStyle::Biocpkg("gage")` package, vignette ["RNA-Seq Data Pathway and Gene-set Analysis Workflows"](https://bioconductor.org/packages/release/bioc/vignettes/gage/inst/doc/RNA-seqWorkflow.pdf) demonstrates GAGE/Pathview workflows on RNA-seq (and microarray) pathway analysis. Note [the Pathview Web server](https://pathview.uncc.edu/) provides a comprehensive workflow for both regular and integrated pathway analysis of multiple omics data [@luo:etal:2017], as shown in [Example 4 online](https://pathview.uncc.edu/example4).
 
 Note `r BiocStyle::Biocpkg("pathview")` focuses on KEGG pathways, which is good for most regular analyses. If you are interested in working with other major pathway databases, including Reactome, MetaCyc, SMPDB, PANTHER, METACROP etc, you can use `r BiocStyle::Biocpkg("SBGNview")`. 
 Please check [the quick start  page](https://github.com/datapplab/SBGNview) and [the main tutorial](https://bioconductor.org/packages/devel/bioc/vignettes/SBGNview/inst/doc/SBGNview.Vignette.html) for details. 
@@ -659,7 +659,7 @@ pv.out.list <- pathview(gene.data = gse16873.d[, 1:3],
 
 # Common Errors {#sec:errors}
 
-- mismatch between the IDs for `gene.data` (or `cpd.data`) and `gene.idtype` (or `cpd.idtype`). For example, `gene.data` or `cpd.data` uses some extern ID types, while `gene.idtype = "entrez"` and `cpd.idtype = "kegg"` (default).
+- mismatch between the IDs for `gene.data` (or `cpd.data`) and `gene.idtype` (or `cpd.idtype`). For example, `gene.data` or `cpd.data` uses some external ID types, while `gene.idtype = "entrez"` and `cpd.idtype = "kegg"` (default).
 - mismatch between `gene.data` (or `cpd.data`) and `species`. For example, `gene.data` come from "mouse", while `species = "hsa"`.
 - `pathway.id` wrong or wrong format, right format should be a five digit number, like 04110, 00620 etc.
 - any of `limit, bins, both.dir, trans.fun, discrete, low, mid, high` arguments is specified as a vector of length 1 or 2, instead of a list of 2 elements. Correct format should be like `limit = list(gene = 1, cpd = 1)`.
