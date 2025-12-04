@@ -262,10 +262,6 @@ In the above two examples, we view the data on native KEGG pathway graph. This v
 
 We may also view the data with a *de novo* pathway graph layout using Graphviz engine  (Figure \@ref(fig:fig2)). The graph has the same set of nodes and edges, but with a different layout. We get more controls over the nodes and edge attributes and look. Importantly, the graph is a vector image in PDF format in your working directory.
 
-```{r fig2, echo=FALSE, fig.cap="Example Graphviz view on gene data with default settings. Note that legend is put on the same page as main graph.", out.height="200"}
-knitr::include_graphics("hsa04110.gse16873.pdf")
-```
-
 ```{r graphviz, echo=TRUE}
 pv.out <- pathview(gene.data = gse16873.d[, 1], 
                    pathway.id = demo.paths$sel.paths[i],
@@ -276,6 +272,10 @@ pv.out <- pathview(gene.data = gse16873.d[, 1],
 # pv.out remains the same
 dim(pv.out$plot.data.gene)
 head(pv.out$plot.data.gene)
+```
+
+```{r fig2, echo=FALSE, fig.cap="Example Graphviz view on gene data with default settings. Note that legend is put on the same page as main graph.", out.height="200"}
+knitr::include_graphics("hsa04110.gse16873.pdf")
 ```
 
 In the example above, both main graph and legend were put in one layer (or page). We just list KEGG edge types and ignore node types in legend as to save space. 
@@ -293,16 +293,6 @@ pv.out <- pathview(gene.data = gse16873.d[, 1],
 
 ```{r fig3, echo=FALSE, fig.cap="Example Graphviz view on gene data with `same.layer = FALSE`. Note that legend is put on a different page than main graph.", out.height="200"}
 knitr::include_graphics("hsa04110.gse16873.2layer.pdf")
-
-```
-
-```{r fig4a, echo=FALSE, fig.cap="Example Graphviz view on gene data with `split.group = TRUE`.", out.height="200"}
-knitr::include_graphics("hsa04110.gse16873.split.pdf")
-
-```
-
-```{r fig4b, echo=FALSE, fig.cap="Example Graphviz view on gene data with `expand.node = TRUE`.", out.height="200"}
-knitr::include_graphics("hsa04110.gse16873.split.expanded.pdf")
 
 ```
 
@@ -336,184 +326,186 @@ dim(pv.out$plot.data.gene)
 head(pv.out$plot.data.gene)
 ```
 
+```{r fig4a, echo=FALSE, fig.cap="Example Graphviz view on gene data with `split.group = TRUE`.", out.height="200"}
+knitr::include_graphics("hsa04110.gse16873.split.pdf")
+```
+
+```{r fig4b, echo=FALSE, fig.cap="Example Graphviz view on gene data with `expand.node = TRUE`.", out.height="200"}
+knitr::include_graphics("hsa04110.gse16873.split.expanded.pdf")
+```
 
 
 
 # Data integration {#sec:integration}
 
-`r BiocStyle::Biocpkg("pathview")` provides strong support for data integration. It can be used to integrate, analyze and visualize a wide variety of biological data (\hyperref[subsec:compound]{Subsection \ref*{subsec:compound}}): gene expression, protein expression, genetic association, metabolite, genomic data, literature, and other data types mappable to pathways. Notebaly, it can be directly used for metagenomic, microbiome or unknown species data when the data are mapped to KEGG ortholog pathways (\hyperref[subsec:species]{Subsection \ref*{subsec:species}}). The integrated Mapper module maps a variety of gene/protein IDs and compound/metabolite IDs to standard KEGG gene or compound IDs (\hyperref[subsec:ids]{Subsection \ref*{subsec:ids}}). User data named with any of these different ID types get accurately mapped to target KEGG pathways. Currently, `r BiocStyle::Biocpkg("pathview")` covers KEGG pathways for about 4800 species (\hyperref[subsec:species]{Subsection \ref*{subsec:species}}), and species can be specified either as KEGG code, scientific name or comon name. In addition, `r BiocStyle::Biocpkg("pathview")`  works with different data attributes and formats, both continuous and discrete data (\hyperref[subsec:discrete]{Subsection \ref*{subsec:discrete}}), either in matrix or vector format, with single or multiple samples/experiments etc. Partcullary, `r BiocStyle::Biocpkg("pathview")` can now integrate and compare multiple samples or states into one graph (\hyperref[subsec:multiple]{Subsection \ref*{subsec:multiple}}).
+`r BiocStyle::Biocpkg("pathview")` provides strong support for data integration. It can be used to integrate, analyze and visualize a wide variety of biological data (Section \@ref(subsec:compound)): gene expression, protein expression, genetic association, metabolite, genomic data, literature, and other data types mappable to pathways. Notably, it can be directly used for metagenomic, microbiome or unknown species data when the data are mapped to KEGG ortholog pathways (Section \@ref(subsec:species)). 
+The integrated Mapper module maps a variety of gene/protein IDs and compound/metabolite IDs to standard KEGG gene or compound IDs (Section \@ref(subsec:ids)). User data named with any of these different ID types get accurately mapped to target KEGG pathways. Currently, `r BiocStyle::Biocpkg("pathview")` covers KEGG pathways for about 4800 species (Section \@ref(subsec:species)), and species can be specified either as KEGG code, scientific name or comon name. 
+In addition, `r BiocStyle::Biocpkg("pathview")`  works with different data attributes and formats, both continuous and discrete data (Section \@ref(subsec:discrete)), either in matrix or vector format, with single or multiple samples/experiments etc. Particularly, `r BiocStyle::Biocpkg("pathview")` can now integrate and compare multiple samples or states into one graph (Section \@ref(subsec:multiple)).
 
 ## Compound and gene data {#subsec:compound}
 
-In examples above, we viewed  gene data with canonical signaling pathways. We frequently want to look at metabolic pathways too. Besides gene nodes, these pathways also have compound nodes.  Therefore, we may integrate or visualize both gene data and compound data with metabolic pathways. Here gene data is a broad concept including genes, transcripts, protein , enzymes and their expression, modifications and any measurable attributes. Same is compound data, including metabolites, drugs, their measurements and attributes.
+In examples above, we viewed gene data with canonical signaling pathways. We frequently want to look at metabolic pathways too. Besides gene nodes, these pathways also have compound nodes. Therefore, we may integrate or visualize both gene data and compound data with metabolic pathways. 
+Here gene data is a broad concept including genes, transcripts, protein, enzymes and their expression, modifications and any measurable attributes. Same is compound data, including metabolites, drugs, their measurements and attributes.
 Here we still use the breast cancer microarray dataset as gene data. We then generate simulated compound or metabolomic data, and load proper compound ID types (with sufficient number of unique entries) for demonstration.
+
 ```{r dataPrep.sim.cpd, echo=TRUE}
-sim.cpd.data=sim.mol.data(mol.type="cpd", nmol=3000)
+sim.cpd.data <- sim.mol.data(mol.type = "cpd", nmol = 3000)
 data(cpd.simtypes)
 ```
 
-We generate a native KEGG view graph with both gene data and compound data  (\hyperref[fig:5a]{Figure \ref*{fig:5a}}). Such metabolic pathway graphs generated by `r BiocStyle::Biocpkg("pathview")` is the same as the original KEGG graphs, except that the compound nodes are magnified for better view of the colors.
+We generate a native KEGG view graph with both gene data and compound data  (Figure \@ref(fig:fig5a)). 
+Such metabolic pathway graphs generated by `r BiocStyle::Biocpkg("pathview")` is the same as the original KEGG graphs, except that the compound nodes are magnified for better view of the colors.
+
 ```{r gene_cpd.data, echo=TRUE}
 i <- 3
 print(demo.paths$sel.paths[i])
-pv.out <- pathview(gene.data = gse16873.d[, 1], cpd.data = sim.cpd.data,
-    pathway.id = demo.paths$sel.paths[i], species = "hsa", out.suffix = "gse16873.cpd",
-    keys.align = "y", kegg.native = T, key.pos = demo.paths$kpos1[i])
+pv.out <- pathview(gene.data = gse16873.d[, 1], 
+                   cpd.data = sim.cpd.data,
+                   pathway.id = demo.paths$sel.paths[i], 
+                   species = "hsa", 
+                   out.suffix = "gse16873.cpd",
+                   keys.align = "y", 
+                   kegg.native = TRUE, 
+                   key.pos = demo.paths$kpos1[i])
 str(pv.out)
 head(pv.out$plot.data.cpd)
 ```
 
 
-We also generate Graphviz view of the same pathway and data  (\hyperref[fig:5b]{Figure \ref*{fig:5b}}). Graphviz view better shows the hierarchical structure. For metabolic pathways, we need to parse the reaction entries from xml files and convert it to relationships between gene and compound nodes. We use ellipses for compound nodes. The labels are standard compound names, which are retrieved from CHEMBL database. KEGG does not provide it in the pathway database files. Chemical names are long strings, we need to do word wrap to fit them to specified width on the graph.
+We also generate Graphviz view of the same pathway and data  (\@ref(fig:fig5b). Graphviz view better shows the hierarchical structure. For metabolic pathways, we need to parse the reaction entries from xml files and convert it to relationships between gene and compound nodes. We use ellipses for compound nodes. The labels are standard compound names, which are retrieved from CHEMBL database. 
+KEGG does not provide it in the pathway database files. Chemical names are long strings, we need to do word wrap to fit them to specified width on the graph.
+
 ```{r graphviz.gene_cpd.data, echo=TRUE}
-pv.out <- pathview(gene.data = gse16873.d[, 1], cpd.data = sim.cpd.data,
-    pathway.id = demo.paths$sel.paths[i], species = "hsa", out.suffix = "gse16873.cpd",
-    keys.align = "y", kegg.native = F, key.pos = demo.paths$kpos2[i],
-    sign.pos = demo.paths$spos[i], cpd.lab.offset = demo.paths$offs[i])
+pv.out <- pathview(gene.data = gse16873.d[, 1], 
+                   cpd.data = sim.cpd.data,
+                   pathway.id = demo.paths$sel.paths[i], 
+                   species = "hsa", 
+                   out.suffix = "gse16873.cpd",
+                   keys.align = "y", 
+                   kegg.native = FALSE, 
+                   key.pos = demo.paths$kpos2[i],
+                   sign.pos = demo.paths$spos[i], 
+                   cpd.lab.offset = demo.paths$offs[i])
 ```
 
+```{r fig5a, echo=FALSE, fig.cap="Example KEGG view on both gene data and compound data simultaneously."}
+knitr::include_graphics("hsa00640.gse16873.cpd.png")
 
-\begin{figure}
-        \centering
-        \begin{subfigure}[b]{1.0\textwidth}
-                \centering
-                \fbox{\includegraphics[width=15cm,type=png,ext=.png,read=.png]{hsa00640.gse16873.cpd}}
-                \caption{}
-                {#fig:5a}
-        \end{subfigure}
-        \\
-        \vspace{20pt}
-        \begin{subfigure}[b]{1.0\textwidth}
-                \centering
-                \includegraphics[width=15cm,type=pdf,ext=.pdf,read=.pdf]{hsa00640.gse16873.cpd}
-                \caption{}
-                {#fig:5b}
-        \end{subfigure}
-        \\
-        \caption{Example (a) KEGG view or (b) Graphviz view on both gene data and compound data simultaneously.}
-        {#fig:5}
-\end{figure}
+```
+
+```{r fig5b, echo=FALSE, fig.cap="Example Graphviz view on both gene data and compound data simultaneously."}
+knitr::include_graphics("hsa00640.gse16873.cpd.pdf")
+```
+
 
 ## Multiple states or samples {#subsec:multiple}
 
-In all previous examples, we looked at single sample data, which are either vector or single-column matrix. `r BiocStyle::Biocpkg("pathview")` also handles multiple sample data, it used to generate graph for each sample. Since version 1.1.6, `r BiocStyle::Biocpkg("pathview")` can integrate and plot multiple samples or states into one graph (Figure \hyperref[fig:multi1]{\ref*{fig:multi1}} - \hyperref[fig:multi2]{\ref*{fig:multi2}}).
+In all previous examples, we looked at single sample data, which are either vector or single-column matrix. `r BiocStyle::Biocpkg("pathview")` also handles multiple sample data, it used to generate graph for each sample. 
+Since version 1.1.6, `r BiocStyle::Biocpkg("pathview")` can integrate and plot multiple samples or states into one graph (Figure \@ref(fig:multi1a)/\@ref(fig:multi1b) and \@ref(fig:multi2)). 
 
 Let's simulate compound data with multiple replicate samples first.
+
 ```{r sim.cpd.data2, echo=TRUE}
 set.seed(10)
-sim.cpd.data2 = matrix(sample(sim.cpd.data, 18000,
-    replace = T), ncol = 6)
-rownames(sim.cpd.data2) = names(sim.cpd.data)
-colnames(sim.cpd.data2) = paste("exp", 1:6, sep = "")
+sim.cpd.data2 <- matrix(sample(sim.cpd.data, 18000,
+                               replace = T), ncol = 6)
+rownames(sim.cpd.data2) <- names(sim.cpd.data)
+colnames(sim.cpd.data2) <- paste("exp", 1:6, sep = "")
 head(sim.cpd.data2, 3)
 ```
 
-In the following examples, `gene.data` has three samples while `cpd.data` has two. We may include all these samples in one graph. We can do either native KEGG view (\hyperref[fig:multi1]{Figure \ref*{fig:multi1}}) or Graphviz view (\hyperref[fig:multi2]{Figure \ref*{fig:multi2}})on such multiple-sample data. In these graphs, we see that the gene nodes and compound nodes are sliced into multiple pieces corresponding to different states or samples. Since the sample sizes are different for `gene.data` and `cpd.data`, we can choose to match the data if samples in the two data types are actually paired, i.e. first columns of for `gene.data` and `cpd.data` come from the same experiment/sample, and so on.
+In the following examples, `gene.data` has three samples while `cpd.data` has two. We may include all these samples in one graph. We can do either native KEGG view (Figure \@ref(fig:multi1a)) or Graphviz view (Figure \@ref(fig:multi2)) on such multiple-sample data. 
+In these graphs, we see that the gene nodes and compound nodes are sliced into multiple pieces corresponding to different states or samples. Since the sample sizes are different for `gene.data` and `cpd.data`, we can choose to match the data if samples in the two data types are actually paired, i.e. first columns of for `gene.data` and `cpd.data` come from the same experiment/sample, and so on.
 
 ```{r multisample.gene_cpd.data, echo=TRUE}
-#KEGG view
+# KEGG view
 pv.out <- pathview(gene.data = gse16873.d[, 1:3],
     cpd.data = sim.cpd.data2[, 1:2], pathway.id = demo.paths$sel.paths[i],
     species = "hsa", out.suffix = "gse16873.cpd.3-2s", keys.align = "y",
-    kegg.native = T, match.data = F, multi.state = T, same.layer = T)
+    kegg.native = TRUE, match.data = FALSE, multi.state = TRUE, same.layer = TRUE)
 head(pv.out$plot.data.cpd)
-#KEGG view with data match
+# KEGG view with data match
 pv.out <- pathview(gene.data = gse16873.d[, 1:3],
     cpd.data = sim.cpd.data2[, 1:2], pathway.id = demo.paths$sel.paths[i],
     species = "hsa", out.suffix = "gse16873.cpd.3-2s.match",
-    keys.align = "y", kegg.native = T, match.data = T, multi.state = T,
-    same.layer = T)
-#graphviz view
+    keys.align = "y", kegg.native = TRUE, match.data = TRUE, 
+    multi.state = TRUE, same.layer = TRUE)
+# graphviz view
 pv.out <- pathview(gene.data = gse16873.d[, 1:3],
     cpd.data = sim.cpd.data2[, 1:2], pathway.id = demo.paths$sel.paths[i],
     species = "hsa", out.suffix = "gse16873.cpd.3-2s", keys.align = "y",
-    kegg.native = F, match.data = F, multi.state = T, same.layer = T,
+    kegg.native = FALSE, match.data = FALSE, multi.state = TRUE, same.layer = TRUE,
     key.pos = demo.paths$kpos2[i], sign.pos = demo.paths$spos[i])
 ```
 
-\begin{figure}
-        \centering
-        \begin{subfigure}[b]{1.0\textwidth}
-                \centering
-                \fbox{\includegraphics[width=15cm,type=png,ext=.png,read=.png]{hsa00640.gse16873.cpd.3-2s.multi}}
-                \caption{}
-                {#fig:multi1a}
-        \end{subfigure}
-        \\
-        \vspace{20pt}
-        \begin{subfigure}[b]{1.0\textwidth}
-                \centering
-                \fbox{\includegraphics[width=15cm,type=png,ext=.png,read=.png]{hsa00640.gse16873.cpd.3-2s.match.multi}}
-                \caption{}
-                {#fig:multi1b}
-        \end{subfigure}
-        \\
-        \caption{Example KEGG view on multiple states of both gene data and compound data simultaneously (a) without or (b) with matching the samples.}
-        {#fig:multi1}
-\end{figure}
+```{r multi1a, echo=FALSE, fig.cap="Example KEGG view on multiple states of both gene data and compound data simultaneously without matching the samples."}
+knitr::include_graphics("hsa00640.gse16873.cpd.3-2s.multi.png")
+```
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=16.5cm,type=pdf,ext=.pdf,read=.pdf]{hsa00640.gse16873.cpd.3-2s.multi}
-\caption{Example Graphviz view on multiple states of both gene data and compound data simultaneously.}
-{#fig:multi2}
-\end{center}
-\end{figure}
+```{r multi1b, echo=FALSE, fig.cap="Example KEGG view on multiple states of both gene data and compound data simultaneously with matching the samples."}
+knitr::include_graphics("hsa00640.gse16873.cpd.3-2s.match.multi.png")
+```
+
+```{r multi2, echo=FALSE, fig.cap="Example Graphviz view on multiple states of both gene data and compound data simultaneously."}
+knitr::include_graphics("hsa00640.gse16873.cpd.3-2s.multi.pdf")
+```
+
 
 Again, we may choose to plot the samples separately, i.e. one sample per graph. Note that in this case, the samples in `gene.data` and `cpd.data` has to be matched as to be assigned to the same graph. Hence, argument `match.data` isn't really effective here.
 
 ```{r multisample.gene_cpd.data.seperate, echo=TRUE, eval=FALSE}
-#plot samples/states separately
+# plot samples/states separately
 pv.out <- pathview(gene.data = gse16873.d[, 1:3],
     cpd.data = sim.cpd.data2[, 1:2], pathway.id = demo.paths$sel.paths[i],
     species = "hsa", out.suffix = "gse16873.cpd.3-2s", keys.align = "y",
-    kegg.native = T, match.data = F, multi.state = F, same.layer = T)
+    kegg.native = TRUE, match.data = FALSE, multi.state = FALSE, same.layer = TRUE)
 ```
 
 As described above, KEGG views on the same layer may takes some time. Again, we can choose to do KEGG view with two layers as to speed up the process if we don't mind losing the original KEGG gene labels (or EC numbers).
+
 ```{r multisample.gene_cpd.data.2layer, echo=TRUE, eval=FALSE}
 pv.out <- pathview(gene.data = gse16873.d[, 1:3],
     cpd.data = sim.cpd.data2[, 1:2], pathway.id = demo.paths$sel.paths[i],
     species = "hsa", out.suffix = "gse16873.cpd.3-2s.2layer",
-    keys.align = "y", kegg.native = T, match.data = F, multi.state = T,
-    same.layer = F)
+    keys.align = "y", kegg.native = TRUE, match.data = FALSE, 
+    multi.state = TRUE, same.layer = FALSE)
 ```
 
 ## Discrete data {#subsec:discrete}
 
-So far, we have been dealing with continuous data. But we often work with discrete data too. For instance, we select list of signficant genes or compound based on some statistics (p-value, fold change etc). The input data can be named vector of two levels, either 1 or 0 (signficant or not), or it can be a shorter list of signficant gene/compound names. In the next two examples, we made both `gene.data` and `cpd.data` or `gene.data` only  (\hyperref[fig:6]{Figure \ref*{fig:6}}) discrete.
+So far, we have been dealing with continuous data. But we often work with discrete data too. For instance, we select list of significant genes or compound based on some statistics (p-value, fold change etc). 
+The input data can be named vector of two levels, either 1 or 0 (significant or not), or it can be a shorter list of signficant gene/compound names. In the next two examples, we made both `gene.data` and `cpd.data` discrete, or `gene.data` only (Figure \@ref(fig:fig6)).
+
 ```{r discrete.gene_cpd.data, echo=TRUE}
-require(org.Hs.eg.db)
+library("org.Hs.eg.db")
 gse16873.t <- apply(gse16873.d, 1, function(x) t.test(x,
     alternative = "two.sided")$p.value)
 sel.genes <- names(gse16873.t)[gse16873.t < 0.1]
 sel.cpds <- names(sim.cpd.data)[abs(sim.cpd.data) > 0.5]
 pv.out <- pathview(gene.data = sel.genes, cpd.data = sel.cpds,
     pathway.id = demo.paths$sel.paths[i], species = "hsa", out.suffix = "sel.genes.sel.cpd",
-    keys.align = "y", kegg.native = T, key.pos = demo.paths$kpos1[i],
+    keys.align = "y", kegg.native = TRUE, key.pos = demo.paths$kpos1[i],
     limit = list(gene = 5, cpd = 2), bins = list(gene = 5, cpd = 2),
-    na.col = "gray", discrete = list(gene = T, cpd = T))
+    na.col = "gray", discrete = list(gene = TRUE, cpd = TRUE))
 pv.out <- pathview(gene.data = sel.genes, cpd.data = sim.cpd.data,
     pathway.id = demo.paths$sel.paths[i], species = "hsa", out.suffix = "sel.genes.cpd",
-    keys.align = "y", kegg.native = T, key.pos = demo.paths$kpos1[i],
+    keys.align = "y", kegg.native = TRUE, key.pos = demo.paths$kpos1[i],
     limit = list(gene = 5, cpd = 1), bins = list(gene = 5, cpd = 10),
-    na.col = "gray", discrete = list(gene = T, cpd = F))
+    na.col = "gray", discrete = list(gene = TRUE, cpd = FALSE))
 ```
 
-\begin{figure}
-\begin{center}
-\fbox{\includegraphics[width=15cm,type=png,ext=.png,read=.png]{hsa00640.sel.genes.cpd}}
-\caption{Example native KEGG view on discrete gene data and continuous compound data simultaneously.}
-{#fig:6}
-\end{center}
-\end{figure}
+```{r fig6, echo=FALSE, fig.cap="Example native KEGG view on discrete gene data and continuous compound data simultaneously."}
+knitr::include_graphics("hsa00640.sel.genes.cpd.png")
+```
 
 
 ## ID mapping {#subsec:ids}
 
-A distinguished feature of `r BiocStyle::Biocpkg("pathview")` is its strong ID mapping capability. The integrated Mapper module maps over 10 types of gene or protein IDs, and 20 types of compound or metabolite IDs to standard KEGG gene or compound IDs, and also maps between these external IDs. In other words, user data named with any of these different ID types get accurately mapped to target KEGG pathways. `r BiocStyle::Biocpkg("pathview")` applies to pathways for about 4800 species, and species can be specified in multiple formats: KEGG code, scientific name or comon name.
+A distinguished feature of `r BiocStyle::Biocpkg("pathview")` is its strong ID mapping capability. The integrated Mapper module maps over 10 types of gene or protein IDs, and 20 types of compound or metabolite IDs to standard KEGG gene or compound IDs, and also maps between these external IDs. In other words, user data named with any of these different ID types get accurately mapped to target KEGG pathways. `r BiocStyle::Biocpkg("pathview")` applies to pathways for about 4800 species, and species can be specified in multiple formats: KEGG code, scientific name or common name.
 
-    The following example makes use of the integrated mapper to map external ID types to standard KEGG IDs automatically  (\hyperref[fig:7]{Figure \ref*{fig:7}}). We only need to specify the external ID types using `gene.idtype` and `cpd.idtype` arguments. Note that automatic mapping is limited to certain ID types. For details check: `gene.idtype.list` and `data(rn.list); names(rn.list)`.
+The following example makes use of the integrated mapper to map external ID types to standard KEGG IDs automatically (Figure \@ref(fig:fig7)). 
+We only need to specify the external ID types using `gene.idtype` and `cpd.idtype` arguments. Note that automatic mapping is limited to certain ID types. For details check: `gene.idtype.list` and `data(rn.list); names(rn.list)`.
+
 ```{r gene.ensprot_cpd.cas, echo=TRUE}
 cpd.cas <- sim.mol.data(mol.type = "cpd", id.type = cpd.simtypes[2],
     nmol = 10000)
@@ -521,21 +513,21 @@ gene.ensprot <- sim.mol.data(mol.type = "gene", id.type = gene.idtype.list[4],
     nmol = 50000)
 pv.out <- pathview(gene.data = gene.ensprot, cpd.data = cpd.cas,
     gene.idtype = gene.idtype.list[4], cpd.idtype = cpd.simtypes[2],
-    pathway.id = demo.paths$sel.paths[i], species = "hsa", same.layer = T,
-    out.suffix = "gene.ensprot.cpd.cas", keys.align = "y", kegg.native = T,
+    pathway.id = demo.paths$sel.paths[i], species = "hsa", same.layer = TRUE,
+    out.suffix = "gene.ensprot.cpd.cas", keys.align = "y", kegg.native = TRUE,
     key.pos = demo.paths$kpos2[i], sign.pos = demo.paths$spos[i],
     limit = list(gene = 3, cpd = 3), bins = list(gene = 6, cpd = 6))
 ```
 
-\begin{figure}
-\begin{center}
-\fbox{\includegraphics[width=15cm,type=png,ext=.png,read=.png]{hsa00640.gene.ensprot.cpd.cas}}
-\caption{Example native KEGG view on gene data and compound data with other ID types.}
-{#fig:7}
-\end{center}
-\end{figure}
+```{r fig7, echo=FALSE, fig.cap="Example native KEGG view on gene data and compound data with other ID types."}
+knitr::include_graphics("hsa00640.gene.ensprot.cpd.cas.png")
+```
 
-For external IDs not in the auto-mapping lists, we may make use of the `mol.sum` function (also part of the Mapper module) to do the ID and data mapping explicitly. Here we need to provide `id.map`, the mapping matrix between external ID and KEGG standard ID. We use ID mapping functions including `id2eg` and `cpdidmap` etc to get `id.map` matrix.  Note that these ID mapping functions can be used independent of `pathview` main function. The following example use this route with the simulated `gene.ensprot` and `cpd.kc` data above, and we get the same results (Figure not shown).
+For external IDs not in the auto-mapping lists, we may make use of the `mol.sum` function (also part of the Mapper module) to do the ID and data mapping explicitly. Here we need to provide `id.map`, the mapping matrix between external ID and KEGG standard ID. 
+We use ID mapping functions including `id2eg` and `cpdidmap` etc to get `id.map` matrix.
+Note that these ID mapping functions can be used independent of `pathview` main function.
+The following example use this route with the simulated `gene.ensprot` and `cpd.kc` data above, and we get the same results (Figure not shown).
+
 ```{r gene.ensprot_cpd.cas.manual.map1, echo=TRUE}
 id.map.cas <- cpdidmap(in.ids = names(cpd.cas), in.type = cpd.simtypes[2],
     out.type = "KEGG COMPOUND accession")
@@ -544,30 +536,35 @@ id.map.ensprot <- id2eg(ids = names(gene.ensprot),
     category = gene.idtype.list[4], org = "Hs")
 gene.entrez <- mol.sum(mol.data = gene.ensprot, id.map = id.map.ensprot)
 pv.out <- pathview(gene.data = gene.entrez, cpd.data = cpd.kc,
-    pathway.id = demo.paths$sel.paths[i], species = "hsa", same.layer = T,
-    out.suffix = "gene.entrez.cpd.kc", keys.align = "y", kegg.native = T,
+    pathway.id = demo.paths$sel.paths[i], species = "hsa", same.layer = TRUE,
+    out.suffix = "gene.entrez.cpd.kc", keys.align = "y", kegg.native = TRUE,
     key.pos = demo.paths$kpos2[i], sign.pos = demo.paths$spos[i],
     limit = list(gene = 3, cpd = 3), bins = list(gene = 6, cpd = 6))
 ```
 
 ## Working with species {#subsec:species}
 
-Species is a tricky yet important issue when working with KEGG. KEGG has its own dedicated nomenclature and database for species, which includes about 4800 organisms with complete genomes. In other words, gene data for any of these organisms can be mapped, visualized and analyzed using `r BiocStyle::Biocpkg("pathview")`. This comprehensive species coverage is a prominent feature of `r BiocStyle::Biocpkg("pathview")`'s data integration capacity. However, KEGG does not treat all of these organisms/genomes the same way. KEGG use NCBI GeneID (or Entrez Gene) as the default ID for the most common model animals, including human, mouse, rat etc and a few crops, e.g. soybean, wine grape and maize. On the other hand, KEGG uses Locus tag and other IDs for all others organisms, including animals, plants, fungi, protists, as well as bacteria and archaea.
+Species is a tricky yet important issue when working with KEGG. KEGG has its own dedicated nomenclature and database for species, which includes about 4800 organisms with complete genomes. In other words, gene data for any of these organisms can be mapped, visualized and analyzed using `r BiocStyle::Biocpkg("pathview")`. 
+This comprehensive species coverage is a prominent feature of `r BiocStyle::Biocpkg("pathview")`'s data integration capacity. 
+However, KEGG does not treat all of these organisms/genomes the same way. KEGG uses NCBI GeneID (or Entrez Gene) as the default ID for the most common model animals, including human, mouse, rat etc and a few crops, e.g. soybean, wine grape and maize. 
+On the other hand, KEGG uses Locus tag and other IDs for all others organisms, including animals, plants, fungi, protists, as well as bacteria and archaea.
 
 `r BiocStyle::Biocpkg("pathview")` carries a data matrix `korg`, which includes a complete list of supported KEGG species and default gene IDs. Let's explore `korg` data matrix as to have some idea on KEGG species and its Gene ID usage.
+
 ```{r korg, echo=TRUE}
 data(korg)
 head(korg)
-#number of species which use Entrez Gene as the default ID
-sum(korg[,"entrez.gnodes"]=="1",na.rm=T)
-#number of species which use other ID types or none as the default ID
-sum(korg[,"entrez.gnodes"]=="0",na.rm=T)
-#new from 2017: most species which do not have Entrez Gene annotation any more
-na.idx=is.na(korg[,"ncbi.geneid"])
+# number of species which use Entrez Gene as the default ID
+sum(korg[,"entrez.gnodes"]=="1", na.rm=TRUE)
+# number of species which use other ID types or none as the default ID
+sum(korg[,"entrez.gnodes"]=="0", na.rm=TRUE)
+# new from 2017: most species which do not have Entrez Gene annotation any more
+na.idx <- is.na(korg[,"ncbi.geneid"])
 sum(na.idx)
 ```
 
-From the exploration of `korg` above, we see that out of the ~4800 KEGG species, only a few don't have NCBI (Entrez) Gene ID or any gene ID (annotation) at all. Almost all of them have both default KEGG gene ID (often Locus tag) and Entrez Gene ID annotation. Therefore, `pathview` accepts `gene.idtype="kegg"` or `"Entrez"` (case insensitive) for all these species. The users need to make sure the right `gene.idtype` is specified because KEGG and Entrez Gene IDs are not the same except for 35 common species. For 19 species, Bioconductor provides gene annotation packages. The users have the freedom to input `gene.data` with other `gene.idtype`'s. For a list of these Bioconductor annotated species and extra Gene ID types allowed:
+From the exploration of `korg` above, we see that out of the ~4800 KEGG species, only a few don't have NCBI (Entrez) Gene ID or any gene ID (annotation) at all. Almost all of them have both default KEGG gene ID (often Locus tag) and Entrez Gene ID annotation. Therefore, `pathview` accepts `gene.idtype = "kegg"` or `"Entrez"` (case insensitive) for all these species. The users need to make sure the right `gene.idtype` is specified because KEGG and Entrez Gene IDs are not the same except for 35 common species. For 19 species, Bioconductor provides gene annotation packages. The users have the freedom to input `gene.data` with other `gene.idtype`'s. For a list of these Bioconductor annotated species and extra Gene ID types allowed:
+
 ```{r bods_gene.idtype.list, echo=TRUE}
 data(bods)
 bods
@@ -576,39 +573,50 @@ gene.idtype.list
 ```
 
 All previous examples show human data, where Entrez Gene is KEGG's default gene ID. `r BiocStyle::Biocpkg("pathview")` now (since version 1.1.5) explicitly handles species which use Locus tag or other gene IDs as the KEGG default ID. Below are an couple of examples with E coli strain K12 data. First, we work on gene data with the default KEGG ID (Locus tag) for E coli K12.
+
 ```{r eco.dat.kegg, echo=TRUE}
-eco.dat.kegg <- sim.mol.data(mol.type="gene",id.type="kegg",species="eco",nmol=3000)
+eco.dat.kegg <- sim.mol.data(mol.type = "gene", id.type = "kegg",
+                             species = "eco", nmol = 3000)
 head(eco.dat.kegg)
-pv.out <- pathview(gene.data = eco.dat.kegg, gene.idtype="kegg",
-    pathway.id = "00640", species = "eco", out.suffix = "eco.kegg",
-    kegg.native = T, same.layer=T)
+pv.out <- pathview(gene.data = eco.dat.kegg, gene.idtype = "kegg",
+                   pathway.id = "00640", species = "eco", 
+                   out.suffix = "eco.kegg",
+                   kegg.native = TRUE, same.layer = TRUE)
 ```
 
 We may also work on gene data with Entrez Gene ID for E coli K12 the same way as for human. Note this part may not work as org.EcK12.eg.db had some problem from BioC 3.21.
+
 ```{r eco.dat.entrez, echo=TRUE, eval=FALSE}
-eco.dat.entrez <- sim.mol.data(mol.type="gene",id.type="entrez",species="eco",nmol=3000)
+eco.dat.entrez <- sim.mol.data(mol.type = "gene",
+                               id.type = "entrez",
+                               species = "eco", nmol = 3000)
 head(eco.dat.entrez)
 pv.out <- pathview(gene.data = eco.dat.entrez, gene.idtype="entrez",
-    pathway.id = "00640", species = "eco", out.suffix = "eco.entrez",
-    kegg.native = T, same.layer=T)
+                   pathway.id = "00640", species = "eco", 
+                   out.suffix = "eco.entrez",
+                   kegg.native = TRUE, same.layer = TRUE)
 ```
 
 Based on the `bods` data described above, E coli K12 is an Bioconductor annotated species. Hence we may further work on its gene data with other ID types, for example, official gene symbols. When calling `pathview`, such data need to be mapped to Entrez Gene ID first (if not yet), then to default KEGG ID (Locus tag). Therefore, it takes longer time than the last example.
+
 ```{r eco.dat.symbol, echo=TRUE, eval=FALSE}
-egid.eco=eg2id(names(eco.dat.entrez), category="symbol", pkg="org.EcK12.eg.db")
+egid.eco <- eg2id(names(eco.dat.entrez), category="symbol", pkg = "org.EcK12.eg.db")
 eco.dat.symbol <- eco.dat.entrez
 names(eco.dat.symbol) <- egid.eco[,2]
 head(eco.dat.kegg)
 pv.out <- pathview(gene.data = eco.dat.symbol, gene.idtype="symbol",
-    pathway.id = "00640", species = "eco", out.suffix = "eco.symbol.2layer",
-    kegg.native = T, same.layer=F)
+                   pathway.id = "00640", species = "eco", 
+                   out.suffix = "eco.symbol.2layer",
+                   kegg.native = TRUE, same.layer = FALSE)
 ```
 
-Importantly, `r BiocStyle::Biocpkg("pathview")` can be directly used for metagenomic or microbiome data when the data are mapped to KEGG ortholog pathways. And data from any new species that has not been annotated and included in KEGG (non-KEGG species) can also been analyzed and visualized using `r BiocStyle::Biocpkg("pathview")` by mapping to KEGG ortholog pathways the same way. In the next example, we simulate the mapped KEGG ortholog gene data first. Then the data is input as `gene.data` with `species="ko"`. Check `pathview` function for details.
+Importantly, `r BiocStyle::Biocpkg("pathview")` can be directly used for metagenomic or microbiome data when the data are mapped to KEGG ortholog pathways. And data from any new species that has not been annotated and included in KEGG (non-KEGG species) can also been analyzed and visualized using `r BiocStyle::Biocpkg("pathview")` by mapping to KEGG ortholog pathways the same way. In the next example, we simulate the mapped KEGG ortholog gene data first. Then the data is input as `gene.data` with `species = "ko"`. Check `pathview` function for details.
+
 ```{r gene.ensprot_cpd.cas.manual.map2, echo=TRUE}
-ko.data=sim.mol.data(mol.type="gene.ko", nmol=5000)
+ko.data <- sim.mol.data(mol.type = "gene.ko", nmol = 5000)
 pv.out <- pathview(gene.data = ko.data, pathway.id = "04112",
-                   species = "ko", out.suffix = "ko.data", kegg.native = T)
+                   species = "ko", out.suffix = "ko.data", 
+                   kegg.native = TRUE)
 ```
 
 
@@ -617,30 +625,33 @@ pv.out <- pathview(gene.data = ko.data, pathway.id = "04112",
 
 Although built as a stand alone program, `r BiocStyle::Biocpkg("pathview")` may seamlessly integrate with pathway and functional analysis tools for large-scale and fully automated analysis pipeline. The next example shows how to connect common pathway analysis to results rendering with `r BiocStyle::Biocpkg("pathview")`. The pathway analysis was done using another Bioconductor package `r BiocStyle::Biocpkg("gage")` [@luo:etal:2009], and the selected signficant pathways plus the expression data were then piped to `r BiocStyle::Biocpkg("pathview")` for auomated results visualization (Figure not shown).  In `r BiocStyle::Biocpkg("gage")` package, vignette ["RNA-Seq Data Pathway and Gene-set Analysis Workflows"](https://bioconductor.org/packages/release/bioc/vignettes/gage/inst/doc/RNA-seqWorkflow.pdf) demonstrates GAGE/Pathview workflows on RNA-seq (and microarray) pathway analysis. Note [the Pathview Web server](https://pathview.uncc.edu/) provides a comprehensive workflow for both regular and integrated pathway analysis of multiple omics data [@luo:etal:2017], as shown in [Example 4 online](https://pathview.uncc.edu/example4).
 
-Note `r BiocStyle::Biocpkg("pathview")` focuses on KEGG pathways, which is good for most regular analyses. If you are interested in working with other major pathway databases, including Reactome, MetaCyc, SMPDB, PANTHER, METACROP etc, you can use \href{https://github.com/datapplab/SBGNview}{`r BiocStyle::Biocpkg("SBGNview")`}. Please check [the quick start  page](https://github.com/datapplab/SBGNview) and [the main tutorial](https://bioconductor.org/packages/devel/bioc/vignettes/SBGNview/inst/doc/SBGNview.Vignette.html) for details. Also see [SBGNview + GAGE based pathway analysis workflow](https://bioconductor.org/packages/devel/bioc/vignettes/SBGNview/inst/doc/pathway.enrichment.analysis.html).
+Note `r BiocStyle::Biocpkg("pathview")` focuses on KEGG pathways, which is good for most regular analyses. If you are interested in working with other major pathway databases, including Reactome, MetaCyc, SMPDB, PANTHER, METACROP etc, you can use `r BiocStyle::Biocpkg("SBGNview")`. 
+Please check [the quick start  page](https://github.com/datapplab/SBGNview) and [the main tutorial](https://bioconductor.org/packages/devel/bioc/vignettes/SBGNview/inst/doc/SBGNview.Vignette.html) for details. 
+Also see the [SBGNview + GAGE based pathway analysis workflow](https://bioconductor.org/packages/devel/bioc/vignettes/SBGNview/inst/doc/pathway.enrichment.analysis.html).
 
 ```{r GAGE.Pathview.pipeline, echo=TRUE, eval=FALSE}
 library("gage")
 data(gse16873)
 cn <- colnames(gse16873)
-hn <- grep('HN',cn, ignore.case =TRUE)
-dcis <- grep('DCIS',cn, ignore.case =TRUE)
+hn <- grep('HN',cn, ignore.case = TRUE)
+dcis <- grep('DCIS',cn, ignore.case = TRUE)
 data(kegg.gs)
 #pathway analysis using gage
 gse16873.kegg.p <- gage(gse16873, gsets = kegg.gs,
-    ref = hn, samp = dcis)
-#prepare the differential expression data
+                        ref = hn, samp = dcis)
+# prepare the differential expression data
 gse16873.d <- gagePrep(gse16873, ref = hn, samp = dcis)
-#equivalently, you can do simple subtraction for paired samples
-gse16873.d <- gse16873[,dcis]-gse16873[,hn]
-#select significant pathways and extract their IDs
-sel <- gse16873.kegg.p$greater[, "q.val"] < 0.1 & !is.na(gse16873.kegg.p$greater[,
-    "q.val"])
+# equivalently, you can do simple subtraction for paired samples
+gse16873.d <- gse16873[,dcis] - gse16873[,hn]
+# select significant pathways and extract their IDs
+sel <- gse16873.kegg.p$greater[, "q.val"] < 0.1 & 
+  !is.na(gse16873.kegg.p$greater[,"q.val"])
 path.ids <- rownames(gse16873.kegg.p$greater)[sel]
 path.ids2 <- substr(path.ids[c(1, 2, 7)], 1, 8)
-#pathview visualization
-pv.out.list <- pathview(gene.data = gse16873.d[, 1:3], pathway.id = path.ids2,
-    species = "hsa")
+# pathview visualization
+pv.out.list <- pathview(gene.data = gse16873.d[, 1:3], 
+                        pathway.id = path.ids2,
+                        species = "hsa")
 ```
 
 
@@ -648,12 +659,12 @@ pv.out.list <- pathview(gene.data = gse16873.d[, 1:3], pathway.id = path.ids2,
 
 # Common Errors {#sec:errors}
 
--  mismatch between the IDs for `gene.data` (or `cpd.data`) and `gene.idtype` (or `cpd.idtype`). For example, `gene.data` or `cpd.data` uses some extern ID types, while `gene.idtype = "entrez"` and `cpd.idtype = "kegg"` (default).
--  mismatch between `gene.data` (or `cpd.data`) and `species`. For example, `gene.data` come from "mouse", while `species="hsa"`.
--  `pathway.id` wrong or wrong format, right format should be a five digit number, like 04110, 00620 etc.
--  any of `limit, bins, both.dir, trans.fun, discrete, low, mid, high` arguments is specified as a vector of length 1 or 2, instead of a list of 2 elements. Correct format should be like `limit = list(gene = 1, cpd = 1)`.
--  `key.pos` or `sign.pos` not good, hence the color key or signature overlaps with pathway main graph.
--  **Special Note**: some KEGG xml data files are incomplete, inconsistent with corresponding png image or inaccurate/incorrect on some parts. These issues may cause inaccuracy, incosistency, or error messages although `r BiocStyle::Biocpkg("pathview")` tries the best to accommodate them. For instance, we may see inconistence between KEGG view and Graphviz view. As in the latter case, the pathway layout is generated based on data from xml file.
+- mismatch between the IDs for `gene.data` (or `cpd.data`) and `gene.idtype` (or `cpd.idtype`). For example, `gene.data` or `cpd.data` uses some extern ID types, while `gene.idtype = "entrez"` and `cpd.idtype = "kegg"` (default).
+- mismatch between `gene.data` (or `cpd.data`) and `species`. For example, `gene.data` come from "mouse", while `species = "hsa"`.
+- `pathway.id` wrong or wrong format, right format should be a five digit number, like 04110, 00620 etc.
+- any of `limit, bins, both.dir, trans.fun, discrete, low, mid, high` arguments is specified as a vector of length 1 or 2, instead of a list of 2 elements. Correct format should be like `limit = list(gene = 1, cpd = 1)`.
+- `key.pos` or `sign.pos` not good, hence the color key or signature overlaps with pathway main graph.
+- **Special Note**: some KEGG xml data files are incomplete, inconsistent with corresponding png image or inaccurate/incorrect on some parts. These issues may cause inaccuracy, inconsistency, or error messages although `r BiocStyle::Biocpkg("pathview")` tries the best to accommodate them. For instance, we may see inconsistence between KEGG view and Graphviz view. As in the latter case, the pathway layout is generated based on data from xml file.
 
 
 
