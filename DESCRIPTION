@@ -1,10 +1,19 @@
 Package: pathview
 Type: Package
 Title: a tool set for pathway based data integration and visualization
-Version: 1.47.1
-Date: 2025-03-28
-Author: Weijun Luo
-Maintainer: Weijun Luo <luo_weijun@yahoo.com>
+Version: 1.47.2
+Date: 2025-12-04
+Authors@R:
+    c(
+        person(
+            given = "Weijun", family = "Luo", role = c("aut", "cre"),
+            email = "luo_weijun@yahoo.com"
+        ),
+        person(
+            given = "Federico", family = "Marini", role = c("ctb"), 
+            email = "marinif@uni-mainz.de", comment = c(ORCID = "0000-0003-3252-7758")
+        )
+    )
 Description: 
     Pathview is a tool set for pathway based data integration
     and visualization. It maps and renders a wide variety of
