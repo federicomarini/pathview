@@ -76,10 +76,7 @@ jobs:
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install cairo
           brew install --cask xquartz
-          brew install harfbuzz
-          brew install fribidi
           brew install fftw
 
       # - name: Set up gfortran symlinks (macOS)
