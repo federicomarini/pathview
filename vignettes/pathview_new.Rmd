@@ -408,7 +408,7 @@ Let's simulate compound data with multiple replicate samples first.
 ```{r sim.cpd.data2, echo=TRUE}
 set.seed(10)
 sim.cpd.data2 <- matrix(sample(sim.cpd.data, 18000,
-                               replace = T), ncol = 6)
+                               replace = TRUE), ncol = 6)
 rownames(sim.cpd.data2) <- names(sim.cpd.data)
 colnames(sim.cpd.data2) <- paste("exp", 1:6, sep = "")
 head(sim.cpd.data2, 3)
